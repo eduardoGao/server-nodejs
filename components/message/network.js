@@ -1,31 +1,29 @@
-const express = require('express')
+const express = require('express');
+const response = require('../../network/responses');
+const controller = require("./controller")
 
-const router = express.Router()
-const response = require('../../network/responses')
+const router = express.Router();
 
 
-router.post('/', (req, res) => {
-  console.log(req.body);
-  console.log(req.query);
-  res.send(`Hay un nuevo mensaje: ${req.query.message}`)
+router.get("/", (req, res) => {
+  //console.log(req.headers)
+  res.send('Home 2')
+  
 })
 
-router.get('/', (req, res) => {
-  console.log(req.headers)
-  res.header({
-    "custom-header": "Mi propio header",
-  })
+router.post("/", (req, res) => {
+  //controller.module.addMessage
+  controller.addMessage(req.body.user, req.body.message)
+  response.success(req, res, "Mensaje enviado", 201)
 })
 
-router.put('/', (req, res) => {
-  //res.status(202).send({
-    //'error': null,
-    //'body': 'Acción concretada'
-  //})
+
+router.put("/", (req, res) => {
+  
   response.success(req, res, 'Operación exitosa', 201)
 })
 
-router.delete('/', (req, res) => {
+router.delete("/", (req, res) => {
   if(req.query.text == 'ok') {
     response.error(req, res, 'No se pudo')
   } else {
