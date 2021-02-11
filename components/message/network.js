@@ -27,10 +27,14 @@ router.post("/", (req, res) => {
     })
 })
 
+router.patch("/:id", (req, res) => {
+  //console.log(req.params.id)
+  //res.send('ok')
 
-router.put("/", (req, res) => {
-  
-  response.success(req, res, 'Operación exitosa', 201)
+  controller.updateMessage(req.params.id, req.body.message)
+    .then((data) => response.success(req, res, data, 200))
+    .catch((err) => response.error(req, res, 'error interno', 500, err))
+  //response.success(req, res, 'Operación exitosa', 201)
 })
 
 router.delete("/", (req, res) => {
