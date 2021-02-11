@@ -6,15 +6,25 @@ const router = express.Router();
 
 
 router.get("/", (req, res) => {
-  //console.log(req.headers)
-  res.send('Home 2')
-  
+  controller.getMessages()
+    .then((messageList) => {
+      response.success(req, res, messageList, 200)
+    })
+    .catch(err => {
+      response.error(req, res, 'No hay registros', 500, err)
+    })
 })
 
 router.post("/", (req, res) => {
   //controller.module.addMessage
   controller.addMessage(req.body.user, req.body.message)
-  response.success(req, res, "Mensaje enviado", 201)
+    .then((fullMessage) => {
+      response.success(req, res, fullMessage, 201)
+    })
+    .catch((err) => {
+      response.error(req, res, 'Información invalida', 400)
+      console.error(err)
+    })
 })
 
 
