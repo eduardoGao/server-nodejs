@@ -18,9 +18,15 @@ db.connect(uri, {
 
 
 
-async function getMessages() {
-  //return list;
-  const messages = await Model.find()
+async function getMessages(filterUser) {
+  let filter = {};
+  
+  if(filterUser !== null) {
+    //filter = { user: filterUser }
+    filter.user = new RegExp(filterUser, "i")
+  }
+  
+  const messages = await Model.find(filter)
   return messages;
 }
 
@@ -40,8 +46,15 @@ async function updateMessage(id, message) {
   return newMessage
 }
 
+function deleteMessage(id) {
+  return Model.deleteOne({
+    _id: id
+  })
+}
+
 module.exports = {
   add: addMessage,
   list: getMessages,
   updateText: updateMessage,
+  delete: deleteMessage,
 }

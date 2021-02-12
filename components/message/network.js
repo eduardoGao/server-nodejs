@@ -6,7 +6,9 @@ const router = express.Router();
 
 
 router.get("/", (req, res) => {
-  controller.getMessages()
+  const filterMessages = req.query.user || null;
+
+  controller.getMessages(filterMessages)
     .then((messageList) => {
       response.success(req, res, messageList, 200)
     })
@@ -37,12 +39,10 @@ router.patch("/:id", (req, res) => {
   //response.success(req, res, 'Operación exitosa', 201)
 })
 
-router.delete("/", (req, res) => {
-  if(req.query.text == 'ok') {
-    response.error(req, res, 'No se pudo')
-  } else {
-    response.success(req, res, 'Operación exitosa', 201)
-  }
+router.delete("/:id", (req, res) => {
+  controller.deleteMessage(req.params.id)
+    .then(() => response.success(req, res, `Mensaje: ${req.params.id} ha sido eliminado`, 200))
+    .catch((err) => response.error(req, res, 'Error interno', 500, err))
 })
 
 module.exports = router;
